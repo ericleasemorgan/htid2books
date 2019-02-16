@@ -1,6 +1,6 @@
 # htid2books
 
-Given an access key, secret token, and a HathiTrust identifier, output plain text as well as PDF versions of a book
+Given an access key, secret token, and a HathiTrust identifier, output plain text as well as PDF versions of a book.
 
 
 ## Synopsis
