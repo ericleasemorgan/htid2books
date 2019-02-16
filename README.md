@@ -73,7 +73,7 @@ Some interesting HathiTrust identifiers include:
 
 ## Advanced usage
 
-Given a delimited text file, such as HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named `collection2books.sh` is included just for this process. Usage:
+Given a delimited text file, such as a HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named `collection2books.sh` is included just for this process. Usage:
 
    * `./bin/collection2books.sh <token> <key> <tsv>`
    
