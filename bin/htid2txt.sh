@@ -48,7 +48,7 @@ while [[ $CONTINUE -gt 0 ]]; do
 	
 		# output content
 		ITEM=$( printf "%04d" $PAGE )
-		printf %q "$CONTENT" > "$PAGES/page-$ITEM.txt"
+		echo -e "\n$CONTENT\n" > "$PAGES/page-$ITEM.txt"
 	
 	fi
 		
@@ -56,7 +56,7 @@ done
 
 # build the book and output
 BOOK=$( cat $PAGES/*.txt )
-printf %q "$BOOK" > $BOOKS/$HTID.txt
+echo -e "$BOOK" > $BOOKS/$HTID.txt
 
 # calculate length of book and return it; done
 let LEGNTH=PAGE-1 

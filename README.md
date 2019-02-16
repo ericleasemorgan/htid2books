@@ -34,30 +34,30 @@ The code requires quite a bit of infrastructure. First of all, it is implemented
 
 ### `./bin/htid2txt.sh`
 
-To download a plain text version of a HathiTrust item, you first change directories to the system's root and run `./bin/htid2txt.sh`. The script requires three inputs:
+To download a plain text version of a HathiTrust item, you first change directories to the system's root and run [`./bin/htid2txt.sh`](./bin/htid2txt.sh). The script requires three inputs:
 
    1. `token` - your access token
    2. `key` - your secret key
    3. `identifier` - a HathiTrust... identifier
 
-For example, `./bin/htid2txt.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681` In this case, the script will do the tiniest bit of validation, repeatedly run a Perl script (`htid2txt.pl`) to get the OCR of an individual page, cache the result, and when there no more pages in the given book, concatenate the cache into a text file saved in the directory named `./books`.
+For example, `./bin/htid2txt.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681` In this case, the script will do the tiniest bit of validation, repeatedly run a Perl script ([`htid2txt.pl`](./bin/htid2txt.pl)) to get the OCR of an individual page, cache the result, and when there no more pages in the given book, concatenate the cache into a text file saved in the directory named `./books`.
 
 
 ### `./bin/htid2pdf.sh`
 
-Similarly, to create a PDF version of a given HathiTrust item run `./bin/htid2pdf.sh`. It requires four inputs:
+Similarly, to create a PDF version of a given HathiTrust item run [`./bin/htid2pdf.sh`](./bin/htid2pdf.sh). It requires four inputs:
 
    1. `token` - your access token
    2. `key` - your secret key
    3. `identifier` - a HathiTrust... identifier
    4. `length` - the number of page images to download
 
-Like above, `htid2pdf.sh` will repeatedly run `htid2pdf.pl`, cache image files, and when done concatenate them into a PDF file saved in the `./books` directory. For example, `./bin/htid2pdf.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681 28`
+Like above, `htid2pdf.sh` will repeatedly run [`htid2pdf.pl`](./bin/htid2pdf.pl), cache image files, and when done concatenate them into a PDF file saved in the `./books` directory. For example, `./bin/htid2pdf.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681 28`
 
 
 ### `./bin/htid2books.sh` 
 
-Finally, `./bin/htid2books.sh` is one script to rule them all. Given a token, secret, and identifier, `htid2books.sh` will sequentially run `htid2txt.sh` and `htid2pdf.sh`.
+Finally, [`./bin/htid2books.sh`](./bin/htid2books.sh) is one script to rule them all. Given a token, secret, and identifier, `htid2books.sh` will sequentially run `htid2txt.sh` and `htid2pdf.sh`.
 
 
 ### Sample identifiers
@@ -73,11 +73,11 @@ Some interesting HathiTrust identifiers include:
 
 ## Advanced usage
 
-Given a delimited text file, such as a HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named `collection2books.sh` is included just for this purpose. Usage:
+Given a delimited text file, such as a HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named [`collection2books.sh`](./bin/collection2books.sh) is included just for this purpose. Usage:
 
    * `./bin/collection2books.sh <token> <key> <tsv>`
    
-And a collection file named `./etc/collection.tsv` can be used as sample input - [four works by Charlotte Bronte](https://babel.hathitrust.org/cgi/mb?a=listis;c=954927440). 
+And a collection file named [`./etc/collection.tsv`](./etc/collection.tsv) can be used as sample input - [four works by Charlotte Bronte](https://babel.hathitrust.org/cgi/mb?a=listis;c=954927440). 
 
 
 ## Discussion
@@ -100,9 +100,9 @@ Creating the collection (#1) is easy. Search the 'Trust, mark items of interest,
 
 Downloading (#2) is trivial. Mash the button.
 
-Creating subsets (#3) is easier than one might expect. Yes, there are <em>many</em> duplicates in a collection, but [OpenRefine](http://openrefine.org) is <em>great</em> at normalizing ("clustering") data, and once it is normalized, duplicates can be removed confidently. In the end, a "refined" set of HathiTrust identifiers can be output. 
+Creating subsets (#3) is easier than one might expect. Yes, there are <em>many</em> duplicates in a collection, but [OpenRefine](http://openrefine.org) is <em>really great</em> at normalizing ("clustering") data, and once it is normalized, duplicates can be removed confidently. In the end, a "refined" set of HathiTrust identifiers can be output. 
 
-Given a set of identifiers &amp; APIs, it ought to be easy to programmatically download (#4) the many flavors of 'Trust items: PDF, OCR plain text, bibliographic metadata, and the cool JSON files with embedded part-of-speech analysis. This is the part which is giving me the most difficulty. Slow; download speeds of 1000 bytes/minute. Access control &amp; authentication, which I sincerely understand & appreciate. Multiple data structures. For example, the bibliographic metadata is presented as a stream of JSON, and embedded in it is an escaped XML file, which, in turn, is the manifestation of a MARC bibliographic record. Yikes!
+Given a set of identifiers &amp; APIs, it ought to be easy to programmatically download (#4) the many flavors of 'Trust items: PDF, OCR plain text, bibliographic metadata, and the cool JSON files with embedded part-of-speech analysis. This is the part which is giving me the most difficulty. Slow; download speeds of 1000 bytes/minute. Access control &amp; authentication, which I sincerely understand & appreciate. Multiple data structures. For example, the bibliographic metadata is presented as a stream of JSON, and embedded in it is an escaped XML file, which, in turn, is the manifestation of a MARC bibliographic record. <em>Yikes!</em>
 
 After the many flavors of content are downloaded, more interesting information can be gleaned: sentences, parts-of-speech, named entities, readability scores, sentiment measures, log-likelihood ratios, "topics" & other types of clusters, definitive characteristics of similarly classified documents, etc. In the end the researcher would have created a rich & thorough dataset (#5). 
 
