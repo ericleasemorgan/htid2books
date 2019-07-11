@@ -1,2 +1,5 @@
 .DS_Store
+books/.keep
+books/*.txt
 pages/.keep
+pages/*.txt
