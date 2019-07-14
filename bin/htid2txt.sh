@@ -33,13 +33,10 @@ rm -rf $PAGES/*.txt
 
 # harvest each page
 seq 1 $SIZE | parallel $HARVEST $KEY $SECRET $HTID {}
-wait
 
 # build the book and output
 BOOK=$( cat $PAGES/*.txt )
 echo -e "$BOOK" > $BOOKS/$HTID.txt
 
-# calculate length of book and return it; done
-let LEGNTH=SIZE-1 
-exit $LEGNTH
-
+# done
+exit 

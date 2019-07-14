@@ -10,7 +10,7 @@
 
 
 # configure
-use constant REQUEST => 'https://babel.hathitrust.org/cgi/htd/volume/pageocr/';
+use constant REQUEST => 'https://babel.hathitrust.org/cgi/htd/volume/pageimage/';
 
 # require
 use strict;
@@ -25,7 +25,7 @@ my $page   = $ARGV[ 3 ];
 if ( ! $key | ! $secret | ! $htid | ! $page ) { die "Usage: $0 <key> <secret> <htid> <page>\n" }
 
 # initialize
-my $url  = REQUEST . "$htid/$page";
+my $url = REQUEST . "$htid/$page";
 my $done = 'false';
 
 while( $done eq 'false' ) {

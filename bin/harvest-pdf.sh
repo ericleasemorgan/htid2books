@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
-# harvest-text.sh - given a key, secret, and HathiTrust identifier, build a plain text file; a front-end to harvest-text.pl
+# harvest-pdf.sh - given a key, secret, and HathiTrust identifier, build a plain text file; a front-end to harvest-pdf.pl
 
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame; distributed under a GNU Public License
 
 # July 11, 2019 - first cut; the result of refactoring
-
+# July 14, 2019 - a certain type of creativity
 
 # configure
-HARVEST='./bin/harvest-text.pl'
+HARVEST='./bin/harvest-pdf.pl'
 PAGES='./pages'
-
-MAX=${MAX}
 
 # sanity check
 if [[ -z $1 || -z $2 || -z $3 || -z $4 ]]; then
@@ -27,17 +25,6 @@ HTID=$3
 PAGE=$4
 
 # get content, capture result code, and rest
-CONTENT=$( $HARVEST $KEY $SECRET $HTID $PAGE )
-SUCCESS=$?
+ITEM=$( printf "%04d" $PAGE )
+$HARVEST $KEY $SECRET $HTID $PAGE > "$PAGES/page-$ITEM.png"
 
-# check for success; need to check for values greater than 1
-if [[ $SUCCESS -eq 1 ]]; then
-
-	# output content
-	ITEM=$( printf "%04d" $PAGE )
-	echo -e "\n$CONTENT\n" > "$PAGES/page-$ITEM.txt"
-
-fi
-
-# done
-exit
