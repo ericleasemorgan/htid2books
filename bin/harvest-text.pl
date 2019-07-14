@@ -45,7 +45,6 @@ while( $done eq 'false' ) {
 		);
 
 	# debug
-	#warn join( "\t", ( $page, $response->code, $response->content ) ), "\n";
 	warn join( "\t", ( $page, $response->code ) ), "\n";
 
 	# output, conditionally and done
@@ -57,11 +56,10 @@ while( $done eq 'false' ) {
 	}
 
 	# check for time-stamp error
-	elsif ( $response->code == '401' ) {
+	elsif ( $response->code == '401' ) { $done = 'false' }
 
-		$done = 'false'
-	
-	}
+	# system overloaded
+	elsif ( $response->code == '503' ) { $done = 'false'; sleep 1 }
 
 	# error
 	else { exit( 0 ) }

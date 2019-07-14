@@ -27,7 +27,7 @@ PAGE=$4
 # get content, capture result code, and rest
 CONTENT=$( $HARVEST $KEY $SECRET $HTID $PAGE )
 SUCCESS=$?
-sleep 0.1
+# sleep 0.2
 
 # check for success
 if [[ $SUCCESS -gt 0 ]]; then
