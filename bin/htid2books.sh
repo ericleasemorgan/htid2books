@@ -6,6 +6,7 @@
 # (c) University of Notre Dame; distributed under a GNU Public License
 
 # February 16, 2019 - first cut
+# July     14, 2019 - added size; broke collection builder
 
 
 # configure
@@ -13,8 +14,8 @@ HTID2TXT='./bin/htid2txt.sh'
 HTID2PDF='./bin/htid2pdf.sh'
 
 # sanity check
-if [[ -z $1 || -z $2 || -z $3 || -z $4 ]]; then
-	echo "Usage: $0 <key> <secret> <HathiTrust identifier> <size>" >&2
+if [[ -z $1 || -z $2 || -z $3 ]]; then
+	echo "Usage: $0 <key> <secret> <HathiTrust identifier>" >&2
 	exit
 fi
 
@@ -22,9 +23,8 @@ fi
 KEY=$1
 SECRET=$2
 HTID=$3
-SIZE=$4
 
 # do the work and done; tricky
-$HTID2TXT $KEY $SECRET $HTID $SIZE
-$HTID2PDF $KEY $SECRET $HTID $SIZE
+$HTID2TXT $KEY $SECRET $HTID
+$HTID2PDF $KEY $SECRET $HTID $?
 exit

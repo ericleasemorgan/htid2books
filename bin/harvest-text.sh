@@ -6,13 +6,12 @@
 # (c) University of Notre Dame; distributed under a GNU Public License
 
 # July 11, 2019 - first cut; the result of refactoring
+# July 14, 2019 - trapped for file not found
 
 
 # configure
 HARVEST='./bin/harvest-text.pl'
 PAGES='./pages'
-
-MAX=${MAX}
 
 # sanity check
 if [[ -z $1 || -z $2 || -z $3 || -z $4 ]]; then
@@ -38,6 +37,9 @@ if [[ $SUCCESS -eq 1 ]]; then
 	echo -e "\n$CONTENT\n" > "$PAGES/page-$ITEM.txt"
 
 fi
+
+# trap for file not found
+if [[ $SUCCESS -gt 1 ]]; then kill $PPID; fi
 
 # done
 exit

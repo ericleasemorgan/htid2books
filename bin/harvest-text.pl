@@ -7,7 +7,7 @@
 
 # February 10, 2019 - first cut
 # February 16, 2019 - gonna call it done, but software is never finished
-
+# July     14, 2019 - trapped for HTTP errors 401, 404, and 503
 
 # configure
 use constant REQUEST => 'https://babel.hathitrust.org/cgi/htd/volume/pageocr/';
@@ -55,10 +55,19 @@ while( $done eq 'false' ) {
 	
 	}
 
-	# check for time-stamp error
+	# check for time-stamp error; re-try
 	elsif ( $response->code == '401' ) { $done = 'false' }
 
-	# system overloaded
+	# check for file not found; signal exit
+	elsif ( $response->code == '404' ) {
+	
+		$done = 'true';
+		`echo $page >> ./tmp/$htid.txt`;
+		exit ( $page ) 
+	
+	}
+
+	# system overloaded; rest
 	elsif ( $response->code == '503' ) { $done = 'false'; sleep 1 }
 
 	# error
