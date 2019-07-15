@@ -1,3 +1,4 @@
+
 .DS_Store
 books/.keep
 books/*.txt
@@ -5,3 +6,4 @@ pages/.keep
 pages/*.txt
 pages/*.png
 tmp/*.txt
+etc/*.tsv
