@@ -26,5 +26,5 @@ HTID=$3
 
 # do the work and done; tricky
 $HTID2TXT $KEY $SECRET $HTID
-#$HTID2PDF $KEY $SECRET $HTID $?
+$HTID2PDF $KEY $SECRET $HTID $?
 exit
