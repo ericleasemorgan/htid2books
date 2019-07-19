@@ -45,7 +45,7 @@ while( $done eq 'false' ) {
 		);
 
 	# debug
-	warn join( "\t", ( $page, $response->code ) ), "\n";
+	warn join( "\t", ( $htid, 'txt', $page, $response->code ) ), "\n";
 
 	# output, conditionally and done
 	if ( $response->code == '200' ) {
@@ -61,14 +61,16 @@ while( $done eq 'false' ) {
 	# check for file not found; signal exit
 	elsif ( $response->code == '404' ) {
 	
-		$done = 'true';
-		`echo $page >> ./tmp/$htid.txt`;
+		$done      =  'true';
+		my $output =  $htid ;
+		$output    =~ s/\//-/g;
+		`echo "$page" >> "./tmp/$output.txt"`;
 		exit ( $page ) 
 	
 	}
 
 	# system overloaded; rest
-	elsif ( $response->code == '503' ) { $done = 'false'; sleep 1 }
+	elsif ( $response->code == '503' ) { $done = 'false'; sleep 2 }
 
 	# error
 	else { exit( 0 ) }

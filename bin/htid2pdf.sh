@@ -37,6 +37,7 @@ seq 1 $SIZE | parallel $HARVEST $KEY $SECRET $HTID {}
 wait
 
 # build pdf and done
-convert $PAGES/*.png $BOOKS/$HTID.pdf
+OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+convert "${PAGES}/*.png" "${BOOKS}/${OUTPUT}.pdf"
 exit
 

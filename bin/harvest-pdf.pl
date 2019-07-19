@@ -45,7 +45,7 @@ while( $done eq 'false' ) {
 		);
 
 	# debug
-	warn join( "\t", ( $page, $response->code ) ), "\n";
+	warn join( "\t", ( $htid, 'png', $page, $response->code ) ), "\n";
 
 	# output, conditionally and done
 	if ( $response->code == '200' ) {

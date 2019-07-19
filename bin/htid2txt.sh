@@ -15,7 +15,7 @@ HARVEST='./bin/harvest-text.sh'
 PAGES='./pages'
 BOOKS='./books'
 TMP='./tmp'
-MAXIMUM=1000
+MAXIMUM=10000
 
 # sanity check
 if [[ -z $1 || -z $2 || -z $3 ]]; then
@@ -40,10 +40,11 @@ seq 1 $MAXIMUM | parallel $HARVEST $KEY $SECRET $HTID {}
 
 # build the book and output
 BOOK=$( cat $PAGES/*.txt )
-echo -e "$BOOK" > $BOOKS/$HTID.txt
+OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+echo -e "$BOOK" > "${BOOKS}/${OUTPUT}.txt"
 
 # compute the number of pages in the document
-LENGTH=$( cat tmp/$HTID.txt | sort | head -n 1 )
+LENGTH=$( cat "tmp/${OUTPUT}.txt" | sort | head -n 1 )
 let LENGTH=LENGTH-1
 
 # done; export size
