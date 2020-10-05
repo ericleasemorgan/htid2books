@@ -33,11 +33,12 @@ mkdir -p $BOOKS
 rm -rf $PAGES/*.png
 
 # harvest each page
-seq 1 $SIZE | parallel $HARVEST $KEY $SECRET $HTID {}
+seq 1 $SIZE | parallel $HARVEST $KEY $SECRET "$HTID" {}
 wait
 
 # build pdf and done
-OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+#OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+OUTPUT=$( echo "$HTID" )
 convert "${PAGES}/*.png" "${BOOKS}/${OUTPUT}.pdf"
 exit
 

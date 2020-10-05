@@ -33,7 +33,7 @@ while read HTITEM_ID TITLE AUTHOR DATE RIGHTS OCLC LCCN ISBN CATALOG_URL HANDLE_
 	let I=I+1; if [[ $I -eq 1 ]]; then continue; fi
 		
 	# make books
-	$HTID2BOOKS $KEY $SECRET $HTITEM_ID
+	$HTID2BOOKS $KEY $SECRET "$HTITEM_ID"
 	
 done < $TSV
 

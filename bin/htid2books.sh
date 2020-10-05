@@ -22,9 +22,9 @@ fi
 # get input
 KEY=$1
 SECRET=$2
-HTID=$3
+HTID="$3"
 
 # do the work and done; tricky
-$HTID2TXT $KEY $SECRET $HTID
-$HTID2PDF $KEY $SECRET $HTID $?
+$HTID2TXT $KEY $SECRET "$HTID"
+$HTID2PDF $KEY $SECRET "$HTID" $?
 exit

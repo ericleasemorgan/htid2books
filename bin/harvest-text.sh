@@ -22,11 +22,11 @@ fi
 # get input
 KEY=$1
 SECRET=$2
-HTID=$3
+HTID="$3"
 PAGE=$4
 
 # get content, capture result code, and rest
-CONTENT=$( $HARVEST $KEY $SECRET $HTID $PAGE )
+CONTENT=$( $HARVEST $KEY $SECRET "$HTID" $PAGE )
 SUCCESS=$?
 
 # check for success; need to check for values greater than 1

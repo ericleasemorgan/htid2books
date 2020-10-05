@@ -26,5 +26,5 @@ PAGE=$4
 
 # get content, capture result code, and rest
 ITEM=$( printf "%04d" $PAGE )
-$HARVEST $KEY $SECRET $HTID $PAGE > "$PAGES/page-$ITEM.png"
+$HARVEST $KEY $SECRET "$HTID" $PAGE > "$PAGES/page-$ITEM.png"
 

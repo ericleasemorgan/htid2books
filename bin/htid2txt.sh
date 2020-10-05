@@ -26,21 +26,22 @@ fi
 # get input
 KEY=$1
 SECRET=$2
-HTID=$3
+HTID="$3"
 SIZE=$4
 
 # make sane
 mkdir -p $PAGES
 mkdir -p $BOOKS
 rm   -rf $PAGES/*.txt
-rm   -rf $TMP/$HTID.txt
+rm   -rf "$TMP/$HTID.txt"
 
 # harvest each page
-seq 1 $MAXIMUM | parallel $HARVEST $KEY $SECRET $HTID {}
+seq 1 $MAXIMUM | parallel $HARVEST $KEY $SECRET "$HTID"
 
 # build the book and output
 BOOK=$( cat $PAGES/*.txt )
-OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+OUTPUT=$( echo "$HTID" | sed "s/\//-/g" )
+#OUTPUT=$( echo "$HTID" )
 echo -e "$BOOK" > "${BOOKS}/${OUTPUT}.txt"
 
 # compute the number of pages in the document
@@ -49,5 +50,7 @@ let LENGTH=LENGTH-1
 
 # done; export size
 exit $LENGTH
+
+
 
 
