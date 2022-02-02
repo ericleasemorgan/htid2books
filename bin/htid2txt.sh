@@ -8,49 +8,50 @@
 # February 16, 2019 - first documentation
 # July     11, 2019 - figured out how to parallelize the process; substantial speed increase
 # July     14, 2019 - removed need for size parameter; exported size for htid2pdf.sh
+# July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
+# August    1, 2020 - added iconv to output is always utf-8
 
 
 # configure
 HARVEST='./bin/harvest-text.sh'
-PAGES='./pages'
-BOOKS='./books'
+TXT='./txt'
 TMP='./tmp'
 MAXIMUM=10000
+JOBS='4'
 
 # sanity check
-if [[ -z $1 || -z $2 || -z $3 ]]; then
-	echo "Usage: $0 <key> <secret> <HathiTrust identifier>" >&2
+if [[ -z $1 ]]; then
+	echo "Usage: $0 <HathiTrust identifier>" >&2
 	exit
 fi
 
+# more sanity checks
+if [[ -z $HTKEY ]];    then echo "Error: The environment variable named HTKEY is not defined. Call Eric."; exit; fi
+if [[ -z $HTSECRET ]]; then echo "Error: The environment variable named HTSECRET is not defined. Call Eric."; exit; fi
+
 # get input
-KEY=$1
-SECRET=$2
-HTID="$3"
-SIZE=$4
+HTID=$1
 
 # make sane
-mkdir -p $PAGES
-mkdir -p $BOOKS
-rm   -rf $PAGES/*.txt
-rm   -rf "$TMP/$HTID.txt"
+mkdir -p $TMP
+mkdir -p $TXT
+rm   -rf $TMP/*.txt
+
+# initialize outputs name
+OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+
+# don't to the work if it is already done
+#if [[ -f "$TXT/$OUTPUT.txt" ]]; then exit 0; fi
 
 # harvest each page
-seq 1 $MAXIMUM | parallel $HARVEST $KEY $SECRET "$HTID"
+seq 1 $MAXIMUM | parallel --jobs $JOBS $HARVEST $HTID
 
 # build the book and output
-BOOK=$( cat $PAGES/*.txt )
-OUTPUT=$( echo "$HTID" | sed "s/\//-/g" )
-#OUTPUT=$( echo "$HTID" )
-echo -e "$BOOK" > "${BOOKS}/${OUTPUT}.txt"
+BOOK=$( cat $TMP/*.txt )
+echo -e "$BOOK" | iconv -t UTF-8//IGNORE > "$TXT/$OUTPUT.txt"
 
 # compute the number of pages in the document
-LENGTH=$( cat "tmp/${OUTPUT}.txt" | sort | head -n 1 )
-let LENGTH=LENGTH-1
-
-# done; export size
-exit $LENGTH
-
-
-
-
+LENGTH=$( ls -1q ./tmp/*.txt | wc -l |  tr -d ' ' )
+echo "Number of pages: $LENGTH" >&2
+echo $LENGTH
+exit

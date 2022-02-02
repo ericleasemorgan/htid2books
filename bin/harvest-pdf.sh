@@ -5,26 +5,31 @@
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame; distributed under a GNU Public License
 
-# July 11, 2019 - first cut; the result of refactoring
-# July 14, 2019 - a certain type of creativity
+# July     11, 2019 - first cut; the result of refactoring
+# July     14, 2019 - a certain type of creativity
+# July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
+# November 26, 2020 - changed output to jpg, and this was a surprise; on Thanksgiving in Lancaster during a pandemic
+
 
 # configure
 HARVEST='./bin/harvest-pdf.pl'
-PAGES='./pages'
+TMP='./tmp'
 
 # sanity check
-if [[ -z $1 || -z $2 || -z $3 || -z $4 ]]; then
-	echo "Usage: $0 <key> <secret> <HathiTrust identifier> <page>" >&2
+if [[ -z $1 || -z $2 ]]; then
+	echo "Usage: $0 <HathiTrust identifier> <page>" >&2
 	exit
 fi
 
+# more sanity checks
+if [[ -z $HTKEY ]];    then echo "Error: The environment variable named HTKEY is not defined. Call Eric."; exit; fi
+if [[ -z $HTSECRET ]]; then echo "Error: The environment variable named HTSECRET is not defined. Call Eric."; exit; fi
+
 # get input
-KEY=$1
-SECRET=$2
-HTID=$3
-PAGE=$4
+HTID=$1
+PAGE=$2
 
 # get content, capture result code, and rest
 ITEM=$( printf "%04d" $PAGE )
-$HARVEST $KEY $SECRET "$HTID" $PAGE > "$PAGES/page-$ITEM.png"
+$HARVEST $HTID $PAGE > "$TMP/page-$ITEM.jpg"
 

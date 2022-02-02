@@ -2,7 +2,7 @@
 
 # clean.sh - scary
 
-rm -rf ./books/*
-rm -rf ./pages/*
+rm -rf ./pdf/*
+rm -rf ./txt/*
 rm -rf ./tmp/*
 

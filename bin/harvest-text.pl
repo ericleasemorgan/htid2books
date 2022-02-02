@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# htid2txt.pl - given some secrets and a HathiTrust identifier, output a plain (OCRed) text
+# harvest-text.pl - given some secrets and a HathiTrust identifier, output a plain (OCRed) text
 
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame; distributed under a GNU Public License
@@ -8,9 +8,12 @@
 # February 10, 2019 - first cut
 # February 16, 2019 - gonna call it done, but software is never finished
 # July     14, 2019 - trapped for HTTP errors 401, 404, and 503
-
+# July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
+ 
 # configure
 use constant REQUEST => 'https://babel.hathitrust.org/cgi/htd/volume/pageocr/';
+use constant KEY     => $ENV{'HTKEY'};
+use constant SECRET  => $ENV{'HTSECRET'};
 
 # require
 use strict;
@@ -18,22 +21,27 @@ use OAuth::Lite::Consumer;
 use OAuth::Lite::AuthMethod;
 
 # get input
-my $key    = $ARGV[ 0 ];
-my $secret = $ARGV[ 1 ];
-my $htid   = $ARGV[ 2 ];
-my $page   = $ARGV[ 3 ];
-if ( ! $key | ! $secret | ! $htid | ! $page ) { die "Usage: $0 <key> <secret> <htid> <page>\n" }
+my $htid = $ARGV[ 0 ];
+my $page = $ARGV[ 1 ];
+if ( ! $htid | ! $page ) { die "Usage: $0 <htid> <page>\n" }
+
+# sanity checks
+if ( ! KEY )    { die "The environment variable named HTKEY is not defined. Call Eric.\n" }
+if ( ! SECRET ) { die "The environment variable named HTSECRET is not defined. Call Eric.\n" }
 
 # initialize
 my $url  = REQUEST . "$htid/$page";
 my $done = 'false';
+binmode( STDOUT, ':utf8' );
+$| = 1;
 
+# work forever, sort of
 while( $done eq 'false' ) {
 
 	# authenticate
 	my $consumer = OAuth::Lite::Consumer->new(
-			consumer_key    => $key,
-			consumer_secret => $secret,
+			consumer_key    => KEY,
+			consumer_secret => SECRET,
 			auth_method     => OAuth::Lite::AuthMethod::URL_QUERY,
 		);
 
@@ -46,17 +54,17 @@ while( $done eq 'false' ) {
 
 	# debug
 	warn join( "\t", ( $htid, 'txt', $page, $response->code ) ), "\n";
-
+		
 	# output, conditionally and done
 	if ( $response->code == '200' ) {
 
-		print $response->content;
+		print $response->decoded_content;
 		exit( 1 );
 	
 	}
 
 	# check for time-stamp error; re-try
-	elsif ( $response->code == '401' ) { $done = 'false' }
+	elsif ( $response->code == '401' ) { $done = 'false'; sleep 2 }
 
 	# check for file not found; signal exit
 	elsif ( $response->code == '404' ) {
