@@ -17,7 +17,7 @@ HARVEST='./bin/harvest-text.sh'
 TXT='./txt'
 TMP='./tmp'
 MAXIMUM=10000
-JOBS='4'
+JOBS='5'
 
 # sanity check
 if [[ -z $1 ]]; then
@@ -41,7 +41,7 @@ rm   -rf $TMP/*.txt
 OUTPUT=$( echo $HTID | sed "s/\//-/g" )
 
 # don't to the work if it is already done
-#if [[ -f "$TXT/$OUTPUT.txt" ]]; then exit 0; fi
+if [[ -f "$TXT/$OUTPUT.txt" ]]; then exit 0; fi
 
 # harvest each page
 seq 1 $MAXIMUM | parallel --jobs $JOBS $HARVEST $HTID

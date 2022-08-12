@@ -66,6 +66,9 @@ while( $done eq 'false' ) {
 	# check for time-stamp error; re-try
 	elsif ( $response->code == '401' ) { $done = 'false'; sleep 2 }
 
+	# check for too many requests; re-try
+	elsif ( $response->code == '429' ) { $done = 'false'; sleep 2 }
+
 	# check for file not found; signal exit
 	elsif ( $response->code == '404' ) {
 	

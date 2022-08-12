@@ -17,7 +17,7 @@ HARVEST='./bin/harvest-pdf.sh'
 TMP='./tmp'
 PDF='./pdf'
 JOBS='4'
-CONVERT='/opt/homebrew/bin/convert'
+CONVERT='convert'
 
 # sanity check
 if [[ -z $1 || -z $2 ]]; then
@@ -32,9 +32,6 @@ if [[ -z $HTSECRET ]]; then echo "Error: The environment variable named HTSECRET
 # get input
 HTID=$1
 SIZE=$2
-
-echo "HTID: $HTID" >&2
-echo "Size: $SIZE" >&2
 
 # make sane
 mkdir -p $TMP
