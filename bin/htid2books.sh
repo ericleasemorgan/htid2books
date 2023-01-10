@@ -28,7 +28,7 @@ if [[ -z $HTSECRET ]]; then echo "Error: The environment variable named HTSECRET
 HTID=$1
 
 # do the work and done; tricky
-LENGTH=$( $HTID2TXT $HTID )
+LENGTH=$( $HTID2TXT "$HTID" )
 echo "length: $LENGTH" >&2
 
 $HTID2PDF $HTID $LENGTH

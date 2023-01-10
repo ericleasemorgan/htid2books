@@ -19,6 +19,7 @@ use constant SECRET  => $ENV{'HTSECRET'};
 use strict;
 use OAuth::Lite::Consumer;
 use OAuth::Lite::AuthMethod;
+use Data::Dumper;
 
 # get input
 my $htid = $ARGV[ 0 ];
@@ -45,12 +46,14 @@ while( $done eq 'false' ) {
 			auth_method     => OAuth::Lite::AuthMethod::URL_QUERY,
 		);
 
+	
 	# request
 	my $response = $consumer->request(
 			method => 'GET',
 			url    => $url,
 			params => { v => '2' }
 		);
+
 
 	# debug
 	warn join( "\t", ( $htid, 'txt', $page, $response->code ) ), "\n";
