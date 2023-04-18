@@ -1,6 +1,6 @@
 # htid2books
 
-Given a HathiTrust identifier, output plain text as well as PDF versions of a book in the public domain in the HathiTrust.
+Given a HathiTrust identifier, output plain text as well as PDF versions of a book in the public domain from the HathiTrust.
 
 
 ## Synopsis
