@@ -29,6 +29,11 @@ HTID=$1
 
 # do the work and done; tricky
 LENGTH=$( $HTID2TXT "$HTID" )
+
+# abort
+#echo "Done; not getting PDF" >&2
+#exit
+
 echo "length: $LENGTH" >&2
 
 $HTID2PDF $HTID $LENGTH

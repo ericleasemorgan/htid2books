@@ -7,6 +7,7 @@
 
 # February 16, 2019 - done in a fit of creativity; "I get these every once in a while"
 # July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
+# April    15, 2023 - escaped $ symbol in HTID
 
 
 # configure
@@ -30,7 +31,10 @@ while read HTID ACCESS RIGHTS HT_BIB_KEY DESCRIPTION SOURCE SOURCE_BIB_NUM OCLC_
 
 	# increment and skip first line
 	let I=I+1; if [[ $I -eq 1 ]]; then continue; fi
-		
+	
+	# escape dollar sign symbol
+	HTID=$( echo $HTID | sed 's/\$/\\$/g' )
+	
 	# make books
 	$HTID2BOOKS $HTID
 	

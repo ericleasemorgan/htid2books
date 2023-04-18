@@ -10,6 +10,7 @@
 # July     14, 2019 - relaxing with a certain type of creativity
 # July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
 # November 26, 2020 - changed output to jpg, and this was a surprise; on Thanksgiving in Lancaster during a pandemic
+# April    15, 2023 - unescaped $ symbol in output name
 
 
 # configure
@@ -43,7 +44,8 @@ seq 1 $SIZE | parallel --jobs $JOBS $HARVEST $HTID {}
 wait
 
 # build pdf and done
-OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+#OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+OUTPUT=$( echo $HTID | sed "s/\//-/g" | sed 's/\\//g' )
 $CONVERT "$TMP/*.jpg" "$PDF/$OUTPUT.pdf"
 exit
 

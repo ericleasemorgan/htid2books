@@ -10,6 +10,7 @@
 # July     14, 2019 - removed need for size parameter; exported size for htid2pdf.sh
 # July      4, 2020 - initializing reader-trust; jevggra va n svg bs perngvir ybaryvarff
 # August    1, 2020 - added iconv to output is always utf-8
+# April    15, 2023 - unescaped $ symbol in output name
 
 
 # configure
@@ -38,7 +39,7 @@ mkdir -p $TXT
 rm   -rf $TMP/*.txt
 
 # initialize outputs name
-OUTPUT=$( echo $HTID | sed "s/\//-/g" )
+OUTPUT=$( echo $HTID | sed "s/\//-/g" | sed 's/\\//g' )
 
 # don't to the work if it is already done
 if [[ -f "$TXT/$OUTPUT.txt" ]]; then exit 0; fi
