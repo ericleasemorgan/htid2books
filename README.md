@@ -1,14 +1,14 @@
 # htid2books
 
-Given an access key, secret token, and a HathiTrust identifier, output plain text as well as PDF versions of a book.
+Given a HathiTrust identifier, output plain text as well as PDF versions of a book in the public domain in the HathiTrust.
 
 
 ## Synopsis
 
-   1. `./bin/htid2txt.sh <token> <key> <identifier>`
-   2. `./bin/htid2pdf.sh <token> <key> <identifier> <length>`
-   3. `./bin/htid2books.sh <token> <key> <identifier>`
-   4. `./bin/collection2books.sh <token> <key> <tsv>`
+   1. `./bin/htid2txt.sh <identifier>`
+   2. `./bin/htid2pdf.sh <identifier> <length>`
+   3. `./bin/htid2books.sh <identifier>`
+   4. `./bin/collection2books.sh <tsv>`
 
 
 ## Introduction
@@ -24,9 +24,16 @@ This system -- htid2books -- is intended to make it easy to download HathiTrust 
 
 To use htid2books you will first need to acquire authentication credentials. These include an access token and "secret key" freely available from the 'Trust to just about any one and upon [request](https://babel.hathitrust.org/cgi/kgs/request).
 
+Once you get your token and key, you need to initialize two environment variables with their values. More specifically, create an environment variable named `HTKEY` with the value of your token. Create a second environment variable named `HTSECRET` with the value of your secret. On Linux/Macintosh computers you can do this from the command line, like this:
+
+	export HTKEY=6752342qwt
+	export HTSECRET=w141qwtqwtwqw
+
+You might want to put something similar in your shell's profile script so the key/secret pair are remembered from iteration to iteration. 
+
 You will then need to download the code itself.
 
-The code requires quite a bit of infrastructure. First of all, it is implemented as a set of six Bash and Perl scripts. People using Linux and Macintosh computers will have no problem here, but folks using Windows will need to install Bash and Perl. ("Sorry, really!") Second, in order to authenticate, a Perl library called [OAuth::Lite](https://metacpan.org/release/OAuth-Lite) is needed. This is most easily installed with some variation of the `cpan install OAuth::Lite` command. Lastly, in order to build a PDF file from sets of downloaded images, you will need a suite of software called [ImageMagick](https://www.imagemagick.org). Installing ImageMagick is best done with some sort of package manager. People using Linux will run a variation of the `yum install imagemagick` or `apt-get install imagemagick` commands. People using Macintoshes might "brew" the installation -- `brew install imagemagick`.
+The code requires quite a bit of infrastructure. First of all, it is implemented as a set of six Bash and Perl scripts. People using Linux and Macintosh computers will have no problem here, but folks using Windows will need to install Bash and Perl. ("Sorry, really!") Second, in order to authenticate, a Perl library called [OAuth::Lite](https://metacpan.org/release/OAuth-Lite) is needed. This is most easily installed with some variation of the `cpan install OAuth::Lite` command. Since the collection of data from the 'Trust is embarrassingly parallel, this system uses a Perl script called... [GNU parallel](https://www.gnu.org/software/parallel/) to implement parallel processing. Lastly, in order to build a PDF file from sets of downloaded images, you will need a suite of software called [ImageMagick](https://www.imagemagick.org). Installing ImageMagick is best done with some sort of package manager. People using Linux will run a variation of the `yum install imagemagick` or `apt-get install imagemagick` commands. People using Macintoshes might "brew" the installation -- `brew install imagemagick`.
 
 
 ## Usage
@@ -34,30 +41,22 @@ The code requires quite a bit of infrastructure. First of all, it is implemented
 
 ### `./bin/htid2txt.sh`
 
-To download a plain text version of a HathiTrust item, you first change directories to the system's root and run [`./bin/htid2txt.sh`](./bin/htid2txt.sh). The script requires three inputs:
-
-   1. `token` - your access token
-   2. `key` - your secret key
-   3. `identifier` - a HathiTrust... identifier
-
-For example, `./bin/htid2txt.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681` In this case, the script will do the tiniest bit of validation, repeatedly run a Perl script ([`htid2txt.pl`](./bin/htid2txt.pl)) to get the OCR of an individual page, cache the result, and when there no more pages in the given book, concatenate the cache into a text file saved in the directory named `./books`.
+To download a plain text version of a HathiTrust item, you first change directories to the system's root and run [`./bin/htid2txt.sh`](./bin/htid2txt.sh). The script requires a single input, a HathiTrust identifier. For example, `./bin/htid2txt.sh nyp.33433082524681` In this case, the script will do the tiniest bit of validation, repeatedly run a Perl script ([`htid2txt.pl`](./bin/htid2txt.pl)) to get the OCR of an individual page, cache the result, and when there no more pages in the given book, concatenate the cache into a text file saved in the directory named `./txt`.
 
 
 ### `./bin/htid2pdf.sh`
 
-Similarly, to create a PDF version of a given HathiTrust item run [`./bin/htid2pdf.sh`](./bin/htid2pdf.sh). It requires four inputs:
+Similarly, to create a PDF version of a given HathiTrust item run [`./bin/htid2pdf.sh`](./bin/htid2pdf.sh). It requires two inputs:
 
-   1. `token` - your access token
-   2. `key` - your secret key
-   3. `identifier` - a HathiTrust... identifier
-   4. `length` - the number of page images to download
+   1. `identifier` - a HathiTrust... identifier
+   2. `length` - the number of page images to download
 
-Like above, `htid2pdf.sh` will repeatedly run [`htid2pdf.pl`](./bin/htid2pdf.pl), cache image files, and when done concatenate them into a PDF file saved in the `./books` directory. For example, `./bin/htid2pdf.sh 194dfe2bg3 xa5350f0c44548487778e942518a nyp.33433082524681 28`
+Like above, `htid2pdf.sh` will repeatedly run [`htid2pdf.pl`](./bin/htid2pdf.pl), cache image files, and when done concatenate them into a PDF file saved in the `./pdf` directory. For example, `./bin/htid2pdf.sh nyp.33433082524681 55` Note: The Data API is kinda dumb in this regard. While one does not need to denote the `length` to download the OCR, but one does need the `length` to download images. I don't know why.
 
 
 ### `./bin/htid2books.sh` 
 
-Finally, [`./bin/htid2books.sh`](./bin/htid2books.sh) is one script to rule them all. Given a token, secret, and identifier, `htid2books.sh` will sequentially run `htid2txt.sh` and `htid2pdf.sh`.
+Finally, [`./bin/htid2books.sh`](./bin/htid2books.sh) is one script to rule them all. Given an identifier, `htid2books.sh` will sequentially run `htid2txt.sh` and `htid2pdf.sh`. For example, `./bin/htid2books.sh nyp.33433082524681`.
 
 
 ### Sample identifiers
@@ -73,11 +72,7 @@ Some interesting HathiTrust identifiers include:
 
 ## Advanced usage
 
-Given a delimited text file, such as a HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named [`collection2books.sh`](./bin/collection2books.sh) is included just for this purpose. Usage:
-
-   * `./bin/collection2books.sh <token> <key> <tsv>`
-   
-And a collection file named [`./etc/collection.tsv`](./etc/collection.tsv) can be used as sample input - [four works by Charlotte Bronte](https://babel.hathitrust.org/cgi/mb?a=listis;c=954927440). 
+Given a delimited text file, such as a HathiTrust collection file, it is more than possible to loop through the file, feed HathiTrust identifiers to `htid2books.sh` and ultimately create a "library". A script named [`collection2books.sh`](./bin/collection2books.sh) is included just for this purpose. Usage: `./bin/collection2books.sh <tsv>` And a collection file named [`./etc/four-items.tsv`](./etc/collection.tsv) can be used as sample input - [four works by Charlotte Bronte](https://babel.hathitrust.org/cgi/mb?a=listis;c=954927440). For example: `./bin/collection2books.sh ./etc/four-items.tsv`
 
 
 ## Discussion
@@ -132,4 +127,4 @@ Fourth and most significantly, the system is not fast. This is not because htid2
 
 ---
 Eric Lease Morgan &lt;emorgan@nd.edu&gt;   
-February 16, 2019
+April 18, 2023
