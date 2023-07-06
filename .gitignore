@@ -1,3 +1,6 @@
-txt/*.txt
-pages/*.jpg
+pdf/.keep
+pdf/*.pdf
+tmp/*.jpg
 tmp/*.txt
+txt/.keep
+txt/*.txt
