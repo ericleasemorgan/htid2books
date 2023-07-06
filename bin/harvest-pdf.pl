@@ -64,6 +64,9 @@ while( $done eq 'false' ) {
 	# check for time-stamp error
 	elsif ( $response->code == '401' ) { $done = 'false'; sleep 3 }
 
+	# check for too many requests; re-try
+	elsif ( $response->code == '429' ) { $done = 'false'; sleep 3 }
+
 	# system overloaded
 	elsif ( $response->code == '503' ) { $done = 'false'; sleep 3 }
 
